@@ -30,14 +30,31 @@ const antilink = JSON.parse(fs.readFileSync('./dono/seguranca/antilink.json'))
 const premium = JSON.parse(fs.readFileSync('./vip/vip.json'));
 /********** FUNÇÕES **********/
 
-const { h2k, generateMessageID, getGroupAdmins, banner, banner2, banner3, start, info, sleep, success, close, log } = require('./betty/servidor/servidor.js');
-
 ////
 
-const { 
-getExtension, Random, 
-getFileBuffer, getBuffer,
-} = require("./betty/servidor/get.js")
+
+const Random = Math.random(10)
+
+const getExtension = async (type) => {
+return await mimetype.extension(type)
+}
+
+const getFileBuffer = async (mediakey, MediaType) => { 
+const stream = await downloadContentFromMessage(mediakey, MediaType)
+let buffer = Buffer.from([])
+for await(const chunk of stream) {
+buffer = Buffer.concat([buffer, chunk])
+}
+return buffer
+}
+
+const getBuffer = (url, options) => new Promise(async (resolve, reject) => { 
+options ? options : {}
+await axios({method: "get", url, headers: {"DNT": 1, "Upgrade-Insecure-Request": 1}, ...options, responseType: "arraybuffer"}).then((res) => {
+resolve(res.data)
+}).catch(reject)
+})
+
 
 //࿇ ══━━━━✥MSG DE ti✥━━━━══ ࿇\\\
 ///⊰᯽⊱═══❖•ೋ° MENUS °ೋ•❖═══⊰᯽⊰\\\
@@ -179,8 +196,6 @@ const moji = mojirandon[Math.floor(Math.random() * (mojirandon.length))]
 var corzinhas = ["red", "green", "yellow", "blue", "magenta", "cyan", "white"]
 const cor13 = corzinhas[Math.floor(Math.random() * (corzinhas.length))]	
 
-console.log(banner.string)
-console.log(banner2.string)
 console.log(color(`           ${emoji} ${botName} está online e pronto para o uso${emoji}\n`,`${cor13}`))
 console.log(color(`
 ╭━════════════════════⊷
